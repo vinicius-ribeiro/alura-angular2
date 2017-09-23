@@ -6,4 +6,6 @@ import { Http } from '@angular/http';
     selector: 'app',
     templateUrl: './app.component.html'
 })
-export class AppComponent { }
+export class AppComponent {
+
+}

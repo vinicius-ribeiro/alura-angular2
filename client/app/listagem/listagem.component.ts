@@ -11,13 +11,13 @@ export class ListagemComponent {
      fotos: Object[] = [];
      
     constructor (http: Http) {
-        /* FORMA 1 DE FAZER
-        let stream = http.get("v1/fotos");
-        //stream.subscribe(function(res) {});
-        stream.subscribe(res => {
-            this.fotos = res.json();
-            console.log(this.fotos);
-        });*/
+    /* FORMA 1 DE FAZER
+    let stream = http.get("v1/fotos");
+    //stream.subscribe(function(res) {});
+    stream.subscribe(res => {
+        this.fotos = res.json();
+        console.log(this.fotos);
+    });*/
 
     //FORMA REZUMIDA (MAIS UTILIZADA)
     http

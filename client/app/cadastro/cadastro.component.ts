@@ -1,7 +1,8 @@
 import { Component }     from '@angular/core';
 import { FotoComponent } from '../foto/foto.component';
-import { Http, Headers } from '@angular/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FotoService } from '../foto/foto.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -11,11 +12,29 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class CadastroComponent {
     
     foto: FotoComponent = new FotoComponent();  
-    http: Http;
     meuForm: FormGroup;
+    service: FotoService;
+    route: ActivatedRoute;
+    router: Router;
     
-    constructor(http: Http, fb: FormBuilder) {
-        this.http    = http;
+    constructor(service: FotoService,  fb: FormBuilder, route: ActivatedRoute, router: Router) {
+        this.service = service;
+        this.route   = route;
+        this.router  = router;
+
+        this.route.params.subscribe(params => {
+            let id = params['id'];
+            if(id) {
+                console.log(id);
+                this.service
+                .buscaPorId(id)
+                .subscribe(
+                    foto => this.foto = foto,
+                    erro => console.log(erro)
+                );
+            }           
+        });
+
         //PARA VALIDACAO
         this.meuForm = fb.group({
             titulo: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -25,17 +44,12 @@ export class CadastroComponent {
     }
     
     cadastrar (event) {
-        event.preventDefault(); //não atualiza a página       
-        let headers = new Headers(); //cabeçalho http
-        headers.append('Content-Type', 'application/json'); //adiciona ao reader
-        
-        //ENVIA VIA POST O OBJETO CONVERTIDO EM JSON
-        //E PASSA O CABEÇALHO HTTP CONFIGURADO
-        //APOS O RETORNO MOSTRA A MENSAGEM
-        this.http.post('v1/fotos', JSON.stringify(this.foto), {headers: headers})
+        event.preventDefault(); //não atualiza a página          
+        this.service.cadastra(this.foto)
         .subscribe(() => {
-            this.foto = new FotoComponent(); //instancia um novo componente para limpar os campos 
-            console.log("Foto salva com sucesso!")
+            console.log("Foto Cadastrada com sucesso!");
+            this.foto = new FotoComponent();
+            this.router.navigate([''])
         }, erro => console.log(erro));
     }
 

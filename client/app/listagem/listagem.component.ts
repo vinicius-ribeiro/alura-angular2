@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
+import { FotoService } from '../foto/foto.service';
+import { FotoComponent } from '../foto/foto.component';
 
 @Component({
     moduleId: module.id,
@@ -7,26 +8,33 @@ import { Http } from '@angular/http';
     templateUrl: './listagem.component.html'
 })
 export class ListagemComponent {
-     //fotos: Array<Object> = [];
-     fotos: Object[] = [];
-     
-    constructor (http: Http) {
-    /* FORMA 1 DE FAZER
-    let stream = http.get("v1/fotos");
-    //stream.subscribe(function(res) {});
-    stream.subscribe(res => {
-        this.fotos = res.json();
-        console.log(this.fotos);
-    });*/
-
-    //FORMA REZUMIDA (MAIS UTILIZADA)
-    http
-    .get('v1/fotos') //conecta no WS
-    .map(res => res.json()) // CONVERTE O RETORNO PARA JSON (IMPORTAR rxjs/add/operator/map NO APP MODULE)
-    .subscribe(fotos => { //SE "INSCREVE" NO RESULTADO PARA UTILIZAR O RETORNO JA COMPOSTO NO FOTOS
-        this.fotos = fotos;
-        console.log(fotos);
-    }, erro => console.log(erro));
-
+    
+    fotos: FotoComponent[] = [];
+    service: FotoService;
+    mensagem: string = '';
+         
+    constructor (service: FotoService) {
+        this.service = service;
+        this.service.lista()
+        .subscribe(fotos =>  {
+            this.fotos = fotos;
+        }, erro => console.log(erro));
     }
+
+    remover (foto: FotoComponent) {
+        this.service
+        .remove(foto)
+        .subscribe(() => {            
+            let novasFotos = this.fotos.slice(0); //copia para uma nova lista
+            let indice     = novasFotos.indexOf(foto);
+            novasFotos.splice(indice, 1);
+            this.fotos = novasFotos;
+            this.mensagem = 'Foto ' + foto.titulo + ' removida com sucesso';
+        }, 
+        erro => {
+            console.log(erro);
+            this.mensagem = 'Não foi possível remover a foto ' + foto.titulo;
+        });
+    }
+
 }

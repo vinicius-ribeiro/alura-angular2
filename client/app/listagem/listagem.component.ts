@@ -30,7 +30,7 @@ export class ListagemComponent {
             novasFotos.splice(indice, 1);
             this.fotos = novasFotos;
             this.mensagem = 'Foto ' + foto.titulo + ' removida com sucesso';
-        }, 
+        },
         erro => {
             console.log(erro);
             this.mensagem = 'Não foi possível remover a foto ' + foto.titulo;

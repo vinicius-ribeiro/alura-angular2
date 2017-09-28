@@ -9,9 +9,18 @@ import { CadastroComponent } from './cadastro/cadastro.component';
 import { ListagemComponent } from './listagem/listagem.component';
 import { routing } from './app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BotaoModule } from './botao/botao.module';
 
 @NgModule({ //TRANSFORMA EM UM MODULO DO ANGULAR
-    imports:      [ BrowserModule, FotoModule, HttpModule, PainelModule, routing, FormsModule, ReactiveFormsModule ], //IMPORTA PARA RODAR NO NAVEGADOR
+    imports: [ 
+        BrowserModule, 
+        FotoModule, 
+        HttpModule, 
+        PainelModule, 
+        routing, FormsModule, 
+        ReactiveFormsModule,
+        BotaoModule 
+    ], //IMPORTA PARA RODAR NO NAVEGADOR
     declarations: [ AppComponent, CadastroComponent, ListagemComponent ], //O QUE FAZ PARTE DESSE MODULO
     bootstrap:    [ AppComponent ] // QUAL COMPONENTE DEVE INICIAR?
 })

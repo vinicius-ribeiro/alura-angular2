@@ -11,11 +11,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class CadastroComponent {
     
-    foto: FotoComponent = new FotoComponent();  
+    foto:    FotoComponent = new FotoComponent();  
     meuForm: FormGroup;
     service: FotoService;
-    route: ActivatedRoute;
-    router: Router;
+    route:   ActivatedRoute;
+    router:  Router;
+    mensagem: string = '';
     
     constructor(service: FotoService,  fb: FormBuilder, route: ActivatedRoute, router: Router) {
         this.service = service;
@@ -46,10 +47,10 @@ export class CadastroComponent {
     cadastrar (event) {
         event.preventDefault(); //não atualiza a página          
         this.service.cadastra(this.foto)
-        .subscribe(() => {
-            console.log("Foto Cadastrada com sucesso!");
+        .subscribe(res => {
+            this.mensagem = res.mensagem;
             this.foto = new FotoComponent();
-            this.router.navigate([''])
+            if(!res.inclusao) this.router.navigate(['']);
         }, erro => console.log(erro));
     }
 
